@@ -1,0 +1,85 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xmaxerrs" << "500"
+    }
+}
+
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
+    defaultConfig {
+        applicationId "com.tmsdurham.tridroidredux"
+        minSdkVersion 21
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            buildConfigField "String", 'DISCOVER_API_KEY', keystoreProperties['DiscoverApiKey']
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/lib_main.kotlin_module'
+        exclude 'META-INF/android_devDebug.kotlin_module'
+        exclude 'META-INF/data_debug.kotlin_module'
+    }
+}
+
+dependencies {
+    compile project(':domain')
+    compile project(':business_logic')
+    compile project(':data')
+    compile project(':presentation')
+    kapt daggerCompiler
+    compile androidSupportCoreUi
+    compile androidSupportAppCompat
+    compile androidSupportDesign
+    compile androidSupportRecyclerView
+    compile dagger
+    compile javaxAnnotation
+    compile javaxInject
+    compile kotlinStdLib
+    compile okHttpLoggingInterceptor
+    compile retrofit
+    compile retrofitAdapterRxJava
+    compile retrofitConverterMoshi
+    compile rxAndroid
+    compile rxBinding
+    compile rxBindingDesign
+    compile rxBindingSupportV4
+    compile rxBindingAppCompatV7
+    compile rxJava
+    compile timber
+    compile mosby
+    compile jodaTime
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'nl.littlerobots.rxlint:rxlint:1.5'
+    compile 'com.airbnb.android:epoxy:2.3.0'
+    kapt 'com.airbnb.android:epoxy-processor:2.3.0'
+    debugCompile 'com.amitshekhar.android:debug-db:1.0.1'
+    implementation constraintLayout
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+}

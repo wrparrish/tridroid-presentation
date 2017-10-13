@@ -1,0 +1,132 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.1.51'
+
+
+    ext {
+        //////////////////////////////////////////////////
+        // VERSIONS
+
+        // Android
+
+        androidBuildToolsVersion = '26.0.1'
+        androidCompileSdkVersion = 26
+        androidMinSdkVersion = 21
+        androidTargetSdkVersion = 26
+        androidSupportVersion = '26.0.1'
+        playServicesVersion = '11.4.2'
+
+        // Redux Version
+        reduxKotlinVersion = '1.2.1'
+        reduxLoggerVersion = '1.2.4'
+        reduxObservableVersion = '1.2.2'
+
+        // Libraries
+        daggerVersion = '2.10'
+        javaxAnnotationVersion = '10.0-b28'
+        javaxInjectVersion = '1'
+        kotlinVersion = '1.1.51'
+        ankoSdkVersion = '21'
+        okHttpVersion = '3.8.1'
+        retrofitVersion = '2.3.0'
+        rxAndroidVersion = '1.2.1'
+        rxBindingVersion = '1.0.0'
+        rxJavaVersion = '1.2.3'
+        rxLocationVersion = '0.10@aar'
+        jodaTimeVersion = '2.9.7'
+        timberVersion = '4.3.1'
+        mosbyVersion = '2.0.1'
+        constraintLayoutVersion = '1.0.2'
+        firebaseVersion = '10.2.6'
+        glideVersion = '3.7.0'
+        glideCacheVersion = '1.4.0@aar'
+        moshiVersion = '1.1.0'
+        progressFabVersion = '1.6'
+
+        // Testing
+
+        assertJVersion = '1.7.1'
+        jUnitVersion = '4.12'
+        mockitoVersion = '2.7.22'
+        spekVersion = '1.0.+'
+        mockitoKotlinVersion = '1.3.0'
+        //////////////////////////////////////////////////
+        // DEPENDENCIES
+
+        // Android
+
+        androidSupportCoreUi = "com.android.support:support-core-ui:$androidSupportVersion"
+        androidSupportAnnotations = "com.android.support:support-annotations:$androidSupportVersion"
+        androidSupportAppCompat = "com.android.support:appcompat-v7:$androidSupportVersion"
+        androidSupportDesign = "com.android.support:design:$androidSupportVersion"
+        androidSupportRecyclerView = "com.android.support:recyclerview-v7:$androidSupportVersion"
+        constraintLayout = "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
+        playServices = "com.google.android.gms:play-services-location:$playServicesVersion"
+
+        // Redux
+        redux = "com.github.pardom:redux-kotlin:$reduxKotlinVersion"
+        reduxLogger = "com.github.pardom:redux-logger-kotlin:$reduxLoggerVersion"
+        reduxObservable = "com.github.pardom:redux-observable-kotlin:$reduxObservableVersion"
+
+        // Third-party
+        dagger = "com.google.dagger:dagger:$daggerVersion"
+        daggerCompiler = "com.google.dagger:dagger-compiler:$daggerVersion"
+        javaxAnnotation = "org.glassfish:javax.annotation:$javaxAnnotationVersion"
+        javaxInject = "javax.inject:javax.inject:$javaxInjectVersion"
+        kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        reduxKotlin = "com.github.pardom:redux-kotlin:$reduxKotlinVersion"
+        reduxObservable = "com.github.pardom:redux-observable-kotlin:$reduxObservableVersion"
+        reduxLogger = "com.github.pardom:redux-logger-kotlin:$reduxLoggerVersion"
+        okHttpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+        retrofit = "com.squareup.retrofit2:retrofit:$retrofitVersion"
+        retrofitAdapterRxJava = "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
+        retrofitConverterMoshi = "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+        rxAndroid = "io.reactivex:rxandroid:$rxAndroidVersion"
+        rxBinding = "com.jakewharton.rxbinding:rxbinding-kotlin:$rxBindingVersion"
+        rxBindingDesign = "com.jakewharton.rxbinding:rxbinding-design-kotlin:$rxBindingVersion"
+        rxBindingSupportV4 = "com.jakewharton.rxbinding:rxbinding-support-v4-kotlin:$rxBindingVersion"
+        rxBindingAppCompatV7 = "com.jakewharton.rxbinding:rxbinding-appcompat-v7-kotlin:$rxBindingVersion"
+        rxJava = "io.reactivex:rxjava:$rxJavaVersion"
+        rxLocation = "pl.charmas.android:android-reactive-location:$rxLocationVersion"
+        jodaTime = "joda-time:joda-time:$jodaTimeVersion"
+        timber = "com.jakewharton.timber:timber:$timberVersion"
+        mosby = "com.hannesdorfmann.mosby:mvp:$mosbyVersion"
+        moshi = "com.squareup.moshi:moshi:$moshiVersion"
+
+
+        // Testing
+
+        assertJ = "org.assertj:assertj-core:$assertJVersion"
+        jUnit = "junit:junit:$jUnitVersion"
+        mockito = "org.mockito:mockito-core:$mockitoVersion"
+        mockitoKotlin = "com.nhaarman:mockito-kotlin:$mockitoKotlinVersion"
+        spek = "org.jetbrains.spek:spek:$spekVersion"
+    }
+
+    repositories {
+        google()
+        jcenter()
+
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.0-beta7'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

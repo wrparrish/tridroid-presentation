@@ -1,0 +1,14 @@
+apply plugin: 'kotlin'
+
+dependencies {
+    compile project(':domain')
+
+    compile javaxInject
+    compile kotlinStdLib
+    compile rxJava
+    compile jodaTime
+
+    testCompile assertJ
+    testCompile jUnit
+    testCompile mockito
+}

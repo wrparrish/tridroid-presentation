@@ -1,0 +1,18 @@
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+dependencies {
+    compile project(':domain')
+    compile project(':business_logic')
+    compile javaxInject
+    compile kotlinStdLib
+    compile rxJava
+    compile jodaTime
+    compile redux
+    compile reduxLogger
+    compile reduxObservable
+
+    testCompile assertJ
+    testCompile jUnit
+    testCompile mockito
+}

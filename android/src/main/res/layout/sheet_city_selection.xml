@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ndroid="http://schemas.android.com/tools"
+    android:id="@+id/sheet_city"
+    android:layout_width="match_parent"
+    android:layout_height="320dp"
+    android:background="#f8f8f8"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="0dp"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+
+
+
+
+    <com.tmsdurham.tridroidredux.common.view.BottomSheetListView
+        android:id="@+id/lv_city"
+        android:layout_width="0dp"
+        android:layout_height="275dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:divider="@null"
+        android:dividerHeight="0dp"/>
+
+    <View
+        android:id="@+id/mask_city_choice"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="#99000000"
+        android:visibility="invisible"
+        android:alpha=".50"
+        android:clickable="true"
+        />
+
+</android.support.constraint.ConstraintLayout>
