@@ -35,7 +35,7 @@ class DiscoverModel @Inject constructor(@Named("cityMap") private val cityMap: M
 
     data class State(
             var cityMap: HashMap<ShortListCity, Boolean> = HashMap(),
-            val city: ShortListCity = ShortListCity("New York, NY", 40.72110286598638, 73.89758759814248, 12.0),
+            val city: ShortListCity = ShortListCity("New York, NY", 40.72110286598638, -73.89758759814248, 12.0),
             val genreUnfilteredEventList: List<Event> = mutableListOf(),
             val isLoading: Boolean = false,
             val isInErrorState: Boolean = false,
