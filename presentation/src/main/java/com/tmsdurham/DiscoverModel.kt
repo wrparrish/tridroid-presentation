@@ -37,11 +37,12 @@ class DiscoverModel @Inject constructor(@Named("cityMap") private val cityMap: M
             var cityMap: HashMap<ShortListCity, Boolean> = HashMap(),
             val city: ShortListCity = ShortListCity("New York, NY", 40.72110286598638, 73.89758759814248, 12.0),
             val genreUnfilteredEventList: List<Event> = mutableListOf(),
-            val isLoading: Boolean = false,
-            val isInErrorState: Boolean = false,
+            //todo  handle loading state
+            //todo handle error state
             val isRefreshRequired: Boolean = false,
-            val isGenreDrawerVisible: Boolean = false,
-            val progressString: String = "")
+            val isGenreDrawerVisible: Boolean = false
+            //todo  handle progress messages
+    )
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,13 +51,13 @@ class DiscoverModel @Inject constructor(@Named("cityMap") private val cityMap: M
 
     sealed class Action {
         class Initialize(val cityMap: MutableMap<ShortListCity, Boolean>)
-        class SetLoading(val isLoading: Boolean)
+        //todo handle loading state
         class IsRefreshRequired(val isRequired: Boolean)
         class CityChosen(val city: ShortListCity, val enabled: Boolean, val isUsersLocationCity: Boolean)
         class UnfilteredEventsAvailable(val events: List<Event>)
-        class SearchFailure
-        class NoEventsReturned
-        class EmitProgress(val progressString: String)
+        //todo handle error state
+        //todo handle progress messages
+
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Reducer
@@ -65,11 +66,7 @@ class DiscoverModel @Inject constructor(@Named("cityMap") private val cityMap: M
         when (action) {
             is Action.Initialize -> state.copy(cityMap = action.cityMap as HashMap<ShortListCity, Boolean>)
             is Action.IsRefreshRequired -> handleRefresh(state, action)
-            is Action.SetLoading -> state.copy(isLoading = action.isLoading, isInErrorState = if (action.isLoading) false else state.isInErrorState)
-            is Action.EmitProgress -> state.copy(progressString = action.progressString)
-            is Action.SearchFailure -> state.copy(isLoading = false, isInErrorState = true)
-            is Action.NoEventsReturned -> handleNoEventsReturned(state)
-            is Action.UnfilteredEventsAvailable -> state.copy(genreUnfilteredEventList = action.events, progressString = "")
+            is Action.UnfilteredEventsAvailable -> state.copy(genreUnfilteredEventList = action.events)
             is Action.CityChosen -> {
                 if (action.city == state.city) {
                     state
@@ -92,11 +89,6 @@ class DiscoverModel @Inject constructor(@Named("cityMap") private val cityMap: M
     }
 
 
-    private fun handleNoEventsReturned(state: State): State {
-        return state.copy(isLoading = false,
-                isInErrorState = true,
-                genreUnfilteredEventList = mutableListOf())
-    }
 
 
     private fun handleRefresh(state: State, action: Action.IsRefreshRequired): State {

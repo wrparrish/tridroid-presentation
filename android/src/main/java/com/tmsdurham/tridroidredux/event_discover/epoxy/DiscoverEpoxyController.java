@@ -47,26 +47,12 @@ public class DiscoverEpoxyController extends TypedEpoxyController<DiscoverModel.
         add(header);
 
 
-        // if we are loading,  or in an error state we short circuit out of the additional model building
+        //todo if we are loading,  or in an error state we short circuit out of the additional model building
 
-        if (state.isLoading()) {
-            add(loaderView
-                    .progressString(state.getProgressString()));
-        } else if (state.isInErrorState()) {
 
-            add(errorModel
-                    .clickListener(new OnModelClickListener<ErrorModel_, ErrorModel.ErrorHolder>() {
-                        @Override
-                        public void onClick(ErrorModel_ errorModel_, ErrorModel.ErrorHolder errorHolder, View view, int i) {
-                            callbacks.onTryAgainClicked();
-                        }
-                    }));
-
-        }  else {
             ArrayList<ListEventModel_> verticalEventModels = getListModels(state.getGenreUnfilteredEventList());
             for (ListEventModel_ model : verticalEventModels) {
                 add(model);
-            }
         }
     }
 

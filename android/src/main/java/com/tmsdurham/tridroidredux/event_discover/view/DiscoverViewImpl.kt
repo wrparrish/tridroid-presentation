@@ -22,17 +22,14 @@ import javax.inject.Inject
 
 
 class DiscoverViewImpl : MvpActivity<DiscoverView, DiscoverPresenter>(), DiscoverView {
-
-
-
-    private val BUNDLE_RECYCLER_LAYOUT = javaClass.simpleName
     lateinit @Inject
     var discoverPresenter: DiscoverPresenter
-
     lateinit @Inject
     var preference: KVPreference
     lateinit @Inject
     var moshi: Moshi
+
+    private val BUNDLE_RECYCLER_LAYOUT = javaClass.simpleName
     private var cityClickSubscription: Subscription? = null
     private var genreClickSubscription: Subscription? = null
     private lateinit var cityDialog: BottomSheetDialog
@@ -56,9 +53,6 @@ class DiscoverViewImpl : MvpActivity<DiscoverView, DiscoverPresenter>(), Discove
     override fun onInitialLoad() {
         presenter.loadSearchState(preference)
     }
-
-
-
 
 
     override fun hideCitySheet() {

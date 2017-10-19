@@ -59,8 +59,8 @@ class DiscoverPresenter @Inject constructor(val model: DiscoverModel,
 
 
     fun fetchEvents() {
-        model.dispatch(SetLoading(true))
-        model.dispatch(EmitProgress("Fetching Events"))
+        //todo handle loading
+        //todo handle progress
 
         var eventList = listOf<Event>()
         val eventIdToInventoryMap = HashMap<String, InventoryStatus>()
@@ -75,7 +75,7 @@ class DiscoverPresenter @Inject constructor(val model: DiscoverModel,
                             eventList.forEach { csvString = csvString.plus("${it.id},") }
                             csvString.dropLast(1)  // removes extra ,
                             val request = GetInventoryStatus.Request(csvString)
-                            model.dispatch(EmitProgress("Checking inventory for ${eventList.size} events."))
+                            //todo progress message                                                                 ------ ***--------
                             getInventoryStatus.execute(request)
                                     .map { it.statusArray }
                                     .map { it.forEach { eventIdToInventoryMap.put(it.eventId, it.status) } }
@@ -92,21 +92,21 @@ class DiscoverPresenter @Inject constructor(val model: DiscoverModel,
                         .subscribe({
                             // on next
                             if (it.isEmpty()) {
-                                model.dispatch(NoEventsReturned())
+                            //    model.dispatch(NoEventsReturned())
                             } else {
                                 makeDispatchesFromEventListGeneration(it)
                             }
                         }, {
                             // on error
                             Timber.e("getEvents error -  $it")
-                            model.dispatch(SearchFailure())
+                            //todo handle error                                                                           ------ ***--------
                         })
     }
 
     private fun makeDispatchesFromEventListGeneration(it: List<Event>) {
 
         model.dispatch(UnfilteredEventsAvailable(it.sortedBy { it.getStartMillis() }.distinctBy { it.id }))
-        model.dispatch(SetLoading(false))  //  you can make this granular dispatch,  or  could probably just toggle loading  when reducing the above action
+        //todo  handle loading state  //  you can make this granular dispatch,  or  could probably just toggle loading  when reducing the above action
         //  i've got a separate one here because in the code this came from,   we did a couple more follow on network calls from this point and were not done yet.
     }
 
@@ -132,12 +132,6 @@ class DiscoverPresenter @Inject constructor(val model: DiscoverModel,
     }
 
 
-    /**
-     * This method checks for a saved city name, and boolean flags for the toggle switch on the genre
-     * and city sheet, and individual flags regarding the interaction state with the end view survey.
-     * It retrieves the csv string of genres,   dispatches an action to set those as enabled.
-     * In the future, we should prefer to take the steps to  serialize and deserialize the entire state object.
-     */
     fun loadSearchState(preference: KVPreference) {
         model.dispatch(DiscoverModel.Action.Initialize(model.provideCityMap()))
 
@@ -154,10 +148,6 @@ class DiscoverPresenter @Inject constructor(val model: DiscoverModel,
 
     }
 
-
-    /**
-     * This method saves the information required to maintain state of the users search preferences, and survey state.
-     */
     fun saveSearchState(preference: KVPreference) {
         val selectedCity = model.state.city
         preference.putString(KVPreference.Tag.SELECTED_CITY_TAG.name, selectedCity.name)
