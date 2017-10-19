@@ -7,6 +7,7 @@ import com.tmsdurham.tridroidredux.common.inject.module.PresentationModule
 import com.tmsdurham.tridroidredux.common.inject.Injector
 import com.tmsdurham.tridroidredux.common.inject.component.DaggerShortListComponent
 import com.tmsdurham.tridroidredux.common.inject.component.ShortListComponent
+import timber.log.Timber
 
 /**
  * Created by billyparrish on 10/12/17.
@@ -16,6 +17,11 @@ class TridroidApp: Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+
         initDagger()
     }
 

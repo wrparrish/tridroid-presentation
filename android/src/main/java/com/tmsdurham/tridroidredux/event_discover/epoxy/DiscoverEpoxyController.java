@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import domain_model.discover.Event;
+import timber.log.Timber;
 
 
 public class DiscoverEpoxyController extends TypedEpoxyController<DiscoverModel.State> {
@@ -40,6 +41,7 @@ public class DiscoverEpoxyController extends TypedEpoxyController<DiscoverModel.
 
     @Override
     protected void buildModels(DiscoverModel.State state) {
+        Timber.e("buildModels %s", state);
         String cityName = state.getCity().getName();
         header.title("Shows this week in")
                 .caption(cityName)
@@ -48,6 +50,11 @@ public class DiscoverEpoxyController extends TypedEpoxyController<DiscoverModel.
 
 
         //todo if we are loading,  or in an error state we short circuit out of the additional model building
+
+        if (state.isLoading()) {
+            add(loaderView);
+            return;
+        }
 
 
             ArrayList<ListEventModel_> verticalEventModels = getListModels(state.getGenreUnfilteredEventList());

@@ -59,7 +59,7 @@ class DiscoverPresenter @Inject constructor(val model: DiscoverModel,
 
 
     fun fetchEvents() {
-        //todo handle loading
+        model.dispatch(SetLoading(true))
         //todo handle progress
 
         var eventList = listOf<Event>()
@@ -92,6 +92,7 @@ class DiscoverPresenter @Inject constructor(val model: DiscoverModel,
                         .subscribe({
                             // on next
                             if (it.isEmpty()) {
+                                Timber.e("event list was empty")
                             //    model.dispatch(NoEventsReturned())
                             } else {
                                 makeDispatchesFromEventListGeneration(it)
@@ -106,7 +107,7 @@ class DiscoverPresenter @Inject constructor(val model: DiscoverModel,
     private fun makeDispatchesFromEventListGeneration(it: List<Event>) {
 
         model.dispatch(UnfilteredEventsAvailable(it.sortedBy { it.getStartMillis() }.distinctBy { it.id }))
-        //todo  handle loading state  //  you can make this granular dispatch,  or  could probably just toggle loading  when reducing the above action
+        model.dispatch(SetLoading(false))  //  you can make this granular dispatch,  or  could probably just toggle loading  when reducing the above action
         //  i've got a separate one here because in the code this came from,   we did a couple more follow on network calls from this point and were not done yet.
     }
 

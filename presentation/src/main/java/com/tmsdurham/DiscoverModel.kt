@@ -35,9 +35,9 @@ class DiscoverModel @Inject constructor(@Named("cityMap") private val cityMap: M
 
     data class State(
             var cityMap: HashMap<ShortListCity, Boolean> = HashMap(),
-            val city: ShortListCity = ShortListCity("New York, NY", 40.72110286598638, 73.89758759814248, 12.0),
+            val city: ShortListCity = ShortListCity("New York, NY", 40.72110286598638, -73.89758759814248, 12.0),
             val genreUnfilteredEventList: List<Event> = mutableListOf(),
-            //todo  handle loading state
+            val isLoading: Boolean = false,
             //todo handle error state
             val isRefreshRequired: Boolean = false,
             val isGenreDrawerVisible: Boolean = false
@@ -51,7 +51,7 @@ class DiscoverModel @Inject constructor(@Named("cityMap") private val cityMap: M
 
     sealed class Action {
         class Initialize(val cityMap: MutableMap<ShortListCity, Boolean>)
-        //todo handle loading state
+        class SetLoading(val isLoading: Boolean)
         class IsRefreshRequired(val isRequired: Boolean)
         class CityChosen(val city: ShortListCity, val enabled: Boolean, val isUsersLocationCity: Boolean)
         class UnfilteredEventsAvailable(val events: List<Event>)
@@ -65,6 +65,7 @@ class DiscoverModel @Inject constructor(@Named("cityMap") private val cityMap: M
     private fun reducer() = Reducer { state: State, action: Any ->
         when (action) {
             is Action.Initialize -> state.copy(cityMap = action.cityMap as HashMap<ShortListCity, Boolean>)
+            is Action.SetLoading -> state.copy(isLoading = action.isLoading)
             is Action.IsRefreshRequired -> handleRefresh(state, action)
             is Action.UnfilteredEventsAvailable -> state.copy(genreUnfilteredEventList = action.events)
             is Action.CityChosen -> {
