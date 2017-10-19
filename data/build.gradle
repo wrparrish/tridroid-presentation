@@ -34,9 +34,4 @@ dependencies {
 
     implementation 'pl.charmas.android:android-reactive-location:0.10@aar'
     compile "com.google.android.gms:play-services-location:$playServicesVersion"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-
-}
-repositories {
-    mavenCentral()
 }
