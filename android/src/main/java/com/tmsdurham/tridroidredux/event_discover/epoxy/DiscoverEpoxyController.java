@@ -3,12 +3,11 @@ package com.tmsdurham.tridroidredux.event_discover.epoxy;
 import android.view.View;
 
 import com.airbnb.epoxy.AutoModel;
-import com.airbnb.epoxy.EpoxyModel;
 import com.airbnb.epoxy.OnModelClickListener;
 import com.airbnb.epoxy.TypedEpoxyController;
+import com.tmsdurham.DiscoverModel;
 import com.tmsdurham.tridroidredux.event_discover.epoxy.banners.HeaderViewModel_;
 import com.tmsdurham.tridroidredux.event_discover.epoxy.banners.LoaderView_;
-import com.tmsdurham.tridroidredux.event_discover.epoxy.filter.EverythingFilterModelGroup;
 import com.tmsdurham.tridroidredux.event_discover.epoxy.list.ListEventModel_;
 import com.tmsdurham.tridroidredux.event_discover.epoxy.list.ListModel_;
 import com.tmsdurham.tridroidredux.event_discover.epoxy.models.ErrorModel;
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import domain_model.discover.Event;
-import com.tmsdurham.DiscoverModel;
 
 
 public class DiscoverEpoxyController extends TypedEpoxyController<DiscoverModel.State> {
@@ -30,12 +28,10 @@ public class DiscoverEpoxyController extends TypedEpoxyController<DiscoverModel.
         setDebugLoggingEnabled(true);
     }
 
-
     @AutoModel
     HeaderViewModel_ header;
     @AutoModel
     ListModel_ listModel;
-
     @AutoModel
     LoaderView_ loaderView;
     @AutoModel
@@ -56,7 +52,6 @@ public class DiscoverEpoxyController extends TypedEpoxyController<DiscoverModel.
         if (state.isLoading()) {
             add(loaderView
                     .progressString(state.getProgressString()));
-            return;
         } else if (state.isInErrorState()) {
 
             add(errorModel
@@ -66,46 +61,28 @@ public class DiscoverEpoxyController extends TypedEpoxyController<DiscoverModel.
                             callbacks.onTryAgainClicked();
                         }
                     }));
-            return;
-        }
 
-
-        if (state.getGenreMap().size() > 0) {
-            add(new EverythingFilterModelGroup(state, callbacks));
-        }
-
-        if (state.getGenreFilteredEventList().size() > 0) {
-            getListModels(state.getGenreFilteredEventList());
-            ArrayList<ListEventModel_> verticalEventModels = getListModels(state.getGenreFilteredEventList());
+        }  else {
+            ArrayList<ListEventModel_> verticalEventModels = getListModels(state.getGenreUnfilteredEventList());
             for (ListEventModel_ model : verticalEventModels) {
                 add(model);
             }
-
-
-        }
-
-    }
-
-
-        public ArrayList<ListEventModel_> getListModels (List < Event > events) {
-            ArrayList<ListEventModel_> list = new ArrayList<>();
-
-            for (Event event : events) {
-                ListEventModel_ model = new ListEventModel_()
-                        .id(event.getId())
-                        .event(event)
-                        .clickListener(new OnModelClickListener() {
-                            @Override
-                            public void onClick(EpoxyModel model, Object parentView, View clickedView, int position) {
-
-                            }
-                        });
-
-                list.add(model);
-            }
-            return list;
         }
     }
+
+
+    public ArrayList<ListEventModel_> getListModels(List<Event> events) {
+        ArrayList<ListEventModel_> list = new ArrayList<>();
+
+        for (Event event : events) {
+            ListEventModel_ model = new ListEventModel_()
+                    .id(event.getId())
+                    .event(event);
+            list.add(model);
+        }
+        return list;
+    }
+}
 
 
 

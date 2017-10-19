@@ -1,20 +1,16 @@
 package com.tmsdurham.tridroidredux.event_discover.view
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialog
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.widget.ListView
-import android.widget.Switch
 import com.hannesdorfmann.mosby.mvp.MvpActivity
 import com.squareup.moshi.Moshi
+import com.tmsdurham.DiscoverModel
 import com.tmsdurham.tridroidredux.R
 import com.tmsdurham.tridroidredux.common.inject.Injector
 import com.tmsdurham.tridroidredux.event_discover.epoxy.DiscoverEpoxyController
@@ -22,14 +18,12 @@ import com.tmsdurham.tridroidredux.event_discover.presenter.DiscoverPresenter
 import data.KVPreference
 import kotlinx.android.synthetic.main.item_city.view.*
 import rx.Subscription
-import com.tmsdurham.DiscoverModel
 import javax.inject.Inject
 
 
 class DiscoverViewImpl : MvpActivity<DiscoverView, DiscoverPresenter>(), DiscoverView {
 
 
-    private val SEARCH_PERMISSIONS_REQUEST_LOCATION: Int = 99
 
     private val BUNDLE_RECYCLER_LAYOUT = javaClass.simpleName
     lateinit @Inject
@@ -43,7 +37,6 @@ class DiscoverViewImpl : MvpActivity<DiscoverView, DiscoverPresenter>(), Discove
     private var genreClickSubscription: Subscription? = null
     private lateinit var cityDialog: BottomSheetDialog
     private lateinit var cityList: ListView
-    private var locationSwitch: Switch? = null
     private var controller: DiscoverEpoxyController? = null
     lateinit var recyclerView: RecyclerView
 
@@ -54,23 +47,10 @@ class DiscoverViewImpl : MvpActivity<DiscoverView, DiscoverPresenter>(), Discove
             cityDialog.show()
         }
 
-        override fun onFilterExpandTextClicked() {
-            presenter.model.dispatch(DiscoverModel.Action.GenreDrawerToggled())
-        }
-
         override fun onTryAgainClicked() {
             presenter.fetchEvents()
         }
 
-        /**
-         * @param genre - The String representation of the genre button that was clicked
-         * @param selected - the existing current state of the genre button that was clicked,  it is expected
-         * that this boolean value will be toggled elsewhere, and this function simply forwards the existing info
-         * of the genre that was clicked.
-         */
-        override fun onGenrePillClicked(genre: kotlin.String, selected: kotlin.Boolean) {
-            presenter.model.dispatch(DiscoverModel.Action.GenreTapped(genre, selected))
-        }
     }
 
     override fun onInitialLoad() {
@@ -113,34 +93,10 @@ class DiscoverViewImpl : MvpActivity<DiscoverView, DiscoverPresenter>(), Discove
         }
     }
 
-    private fun requestLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-                        SEARCH_PERMISSIONS_REQUEST_LOCATION)
-            }
-        }
-    }
-
-
-    private fun hasLocationPermission(): Boolean {
-        val permissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-
-        return permissionCheck == PackageManager.PERMISSION_GRANTED
-    }
-
-
-
-
     override fun createPresenter(): DiscoverPresenter = discoverPresenter
 
     override fun renderState(model: DiscoverModel) = with(model.state) {
         runOnUiThread {
-            locationSwitch?.isChecked = isUserLocationEnabled
             controller?.setData(this)
         }
     }
@@ -184,15 +140,6 @@ class DiscoverViewImpl : MvpActivity<DiscoverView, DiscoverPresenter>(), Discove
         setupSheets()
         setupCityList()
         onInitialLoad()
-
-        locationSwitch?.setOnCheckedChangeListener { compoundButton, enabled ->
-            val granted = hasLocationPermission()
-            if (granted) {
-                presenter.onLocationToggled(enabled)
-            } else if (!granted && enabled) {
-                requestLocationPermission()
-            }
-        }
     }
 
 
@@ -209,8 +156,6 @@ class DiscoverViewImpl : MvpActivity<DiscoverView, DiscoverPresenter>(), Discove
 
 
     interface DiscoverCallbacks {
-        fun onFilterExpandTextClicked()
-        fun onGenrePillClicked(genre: String, selected: Boolean)
         fun onLocationTextClicked()
         fun onTryAgainClicked()
     }

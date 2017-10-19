@@ -32,7 +32,6 @@ class PresentationModule {
     @Provides
     @Singleton
     fun providesDiscoverViewModel(): DiscoverModel {
-
         return DiscoverModel(cityMap)
     }
 

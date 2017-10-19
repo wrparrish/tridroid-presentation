@@ -106,13 +106,8 @@ class DiscoverPresenter @Inject constructor(val model: DiscoverModel,
     private fun makeDispatchesFromEventListGeneration(it: List<Event>) {
 
         model.dispatch(UnfilteredEventsAvailable(it.sortedBy { it.getStartMillis() }.distinctBy { it.id }))
-        val genresInList: List<String> = it
-                .flatMap { it.classifications }
-                .map { it.genre.name }
-                .distinctBy { it }
-                .toMutableList()
-        model.dispatch(GenreListAvailable(genresInList))
-        model.dispatch(SetLoading(false))
+        model.dispatch(SetLoading(false))  //  you can make this granular dispatch,  or  could probably just toggle loading  when reducing the above action
+        //  i've got a separate one here because in the code this came from,   we did a couple more follow on network calls from this point and were not done yet.
     }
 
 
@@ -137,13 +132,6 @@ class DiscoverPresenter @Inject constructor(val model: DiscoverModel,
     }
 
 
-    fun onLocationToggled(enabled: Boolean) {
-        model.dispatch(DiscoverModel.Action.UserLocationToggled(enabled))
-        if (isViewAttached) {
-            view?.hideCitySheet()
-        }
-    }
-
     /**
      * This method checks for a saved city name, and boolean flags for the toggle switch on the genre
      * and city sheet, and individual flags regarding the interaction state with the end view survey.
@@ -164,7 +152,6 @@ class DiscoverPresenter @Inject constructor(val model: DiscoverModel,
             model.dispatch(DiscoverModel.Action.IsRefreshRequired(true))
         }
 
-        if (isUsingUsersLocation) model.dispatch(DiscoverModel.Action.UserLocationResolved())
     }
 
 
@@ -173,10 +160,7 @@ class DiscoverPresenter @Inject constructor(val model: DiscoverModel,
      */
     fun saveSearchState(preference: KVPreference) {
         val selectedCity = model.state.city
-        val isUsingUsersLocation = model.state.isUserLocationEnabled
-
         preference.putString(KVPreference.Tag.SELECTED_CITY_TAG.name, selectedCity.name)
-        preference.putBoolean(KVPreference.Tag.USER_LOCATION_TAG.name, isUsingUsersLocation)
     }
 
 
